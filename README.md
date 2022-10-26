@@ -5,7 +5,7 @@ A simple program that deletes all images that are hosted on online image hosting
 ## Usage
 
 ```ps1
-./sharextended.exe --help
+./shareXtended.exe --help
 ```
 
 ### TODO
