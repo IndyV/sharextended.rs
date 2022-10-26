@@ -1,11 +1,11 @@
-# Sharextended
+# ShareXtended
 
 A simple program that deletes all images that are hosted on online image hosting by sending POST requests to all DeletionURL's.
 
 ## Usage
 
 ```ps1
-./shareXtended.exe --help
+./sharextended.exe --help
 ```
 
 ### TODO
