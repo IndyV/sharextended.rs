@@ -92,7 +92,7 @@ fn prompt_history_file(path: &Path) -> PathBuf {
 fn get_history_urls(path: &PathBuf) -> Result<Vec<String>> {
     let spinner = util::setup_spinner("Reading and parsing JSON...");
 
-    let history_json = read_history_json(&path)?;
+    let history_json = read_history_json(path)?;
     let history_items = parse_history_json(&history_json)?;
     let deletion_urls = get_deletion_urls(&history_items);
 
@@ -112,16 +112,15 @@ fn get_path_input() -> PathBuf {
 
     match path {
         Some(path) => path,
-        None => default_history_path.clone(),
+        None => default_history_path,
     }
 }
 
 fn get_default_history_path() -> PathBuf {
-    let document_directory: PathBuf = if let Some(user_dirs) = UserDirs::new() {
-        user_dirs.document_dir().unwrap().to_path_buf()
-    } else {
-        BaseDirs::new().unwrap().home_dir().join("Documents")
-    };
+    let document_directory: PathBuf = UserDirs::new().map_or_else(
+        || BaseDirs::new().unwrap().home_dir().join("Documents"),
+        |user_dirs| user_dirs.document_dir().unwrap().to_path_buf(),
+    );
     let default_history_path: PathBuf = document_directory.join("ShareX").join("History.json");
 
     default_history_path
