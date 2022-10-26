@@ -1,4 +1,4 @@
-# Delete ShareX online hosted images
+# Sharextended
 
 A simple program that deletes all images that are hosted on online image hosting by sending POST requests to all DeletionURL's.
 
@@ -9,7 +9,7 @@ A simple program that deletes all images that are hosted on online image hosting
 ```
 
 ### TODO
-- Unwrap and expect should be replaced with proper error handling.
+- Unwrap and expect should be replaced with proper matching or flow (make good use of Option/Result).
 - Add GitHub action to build and release binaries (Windows only, since ShareX is Windows only).
 
 ## Motivation
