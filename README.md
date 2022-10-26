@@ -26,7 +26,7 @@ Watching video's from [No Boilerplate](https://www.youtube.com/c/NoBoilerplate) 
 cargo clippy --fix -- -W clippy::pedantic -W clippy::nursery -W clippy::unwrap_used -W clippy::expect_used
 ```
 
-For now I omit the `clippy::unwrap_used`. It's not great to use unwrap as often as I do, but I use it for getting things working. I'm sure I'll get better at error handling in the future.
+For now I omit the `clippy::unwrap_used`. It's not great to use unwrap as often as I do, but I use it for getting things working. I'm sure I'll get better at making use of `Option` and `Result` in the future.
 
 I tried to store the static strings in the `Cargo.toml`, but I figured it's not meant to live outside the code. Also tried to resolve `%USERPROFILE%` in the code but solved it with the `directories` crate.
 
