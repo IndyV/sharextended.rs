@@ -10,7 +10,8 @@ A simple program that deletes all images that are hosted on online image hosting
 
 ### TODO
 - Unwrap and expect should be replaced with proper matching or flow (make good use of Option/Result).
-- Add GitHub action to build and release binaries (Windows only, since ShareX is Windows only).
+- Add GitHub action to build and release binaries (Windows only, since ShareX is Windows only). See [actions/rust-release](https://github.com/marketplace/actions/rust-release) or [actions/rust-release-binary](https://github.com/marketplace/actions/rust-release-binary)
+- Implement concurrent or parallel requests to become "Blazingly Fast™ 🔥" (see https://stackoverflow.com/a/51047786)
 
 ## Motivation
 
