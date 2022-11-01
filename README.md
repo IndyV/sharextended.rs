@@ -44,7 +44,7 @@ I used https://transform.tools/json-to-rust-serde as a reference for the JSON st
 #### Crates used
 - `eyre`: For simple error reporting
 - `tokyo` & `futures`: For writing async Rust
-- `serde` & `serde_json`: For JSON parsing
+- `serde` & `serde_json`: For (JSON) Serialization/Deserialization
 - `clap`: For CLI parsing
 - `reqwest`: For HTTP requests
 - `ansi_term`: For colored output
