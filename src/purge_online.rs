@@ -133,7 +133,7 @@ fn get_history_urls(path: PathBuf) -> Result<Vec<String>> {
     let spinner = util::setup_spinner("Reading and parsing JSON...");
 
     let history_json = read_history_json(path)?;
-    let history_items = parse_history_json(history_json)?;
+    let history_items = parse_history_json(&history_json)?;
     let deletion_urls = filter_deletion_urls(&history_items, None);
 
     spinner.finish_with_message(format!("Done! {} items found", deletion_urls.len()));
@@ -175,8 +175,8 @@ fn read_history_json(path: PathBuf) -> Result<String> {
     Ok(contents)
 }
 
-fn parse_history_json(json: String) -> Result<Vec<HistoryItem>> {
-    let history_items: Vec<HistoryItem> = serde_json::from_str(&json)?;
+fn parse_history_json(json: &str) -> Result<Vec<HistoryItem>> {
+    let history_items: Vec<HistoryItem> = serde_json::from_str(json)?;
     Ok(history_items)
 }
 
@@ -191,7 +191,7 @@ fn filter_deletion_urls(items: &[HistoryItem], from_date: Option<DateTime<Local>
         .filter(|item| {
             item.deletion_url.is_some()
                 && item.deletion_url != Some("".to_string())
-                && item.host == "Imgur".to_string()
+                && item.host == *"Imgur"
                 && item.date_time > from_date.unwrap_or_else(|| Local::now() - Duration::days(1))
         })
         .map(|item| item.deletion_url.clone().unwrap())
@@ -200,7 +200,7 @@ fn filter_deletion_urls(items: &[HistoryItem], from_date: Option<DateTime<Local>
 
 async fn delete_urls(deletion_urls: Result<Vec<String>>) -> Result<()> {
     let deletion_urls = deletion_urls?;
-    if deletion_urls.len() == 0 {
+    if deletion_urls.is_empty() {
         println!("{}", Colour::Yellow.bold().paint("No items to delete!"));
         return Ok(());
     }
