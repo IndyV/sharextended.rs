@@ -1,2 +1,2 @@
-mod mass_delete;
+mod purge_online;
 mod util;

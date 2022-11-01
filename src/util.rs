@@ -11,7 +11,7 @@ lazy_static! {
 }
 
 #[derive(Parser, Debug)]
-#[clap(version = "1.0", author = "IndyV", about = "Delete all ShareX online history items", long_about = None)]
+#[clap(version = "1.0", author = "IndyV", about = None, long_about = None)]
 pub struct Args {
     #[command(subcommand)]
     pub command: Option<Command>,
@@ -19,7 +19,8 @@ pub struct Args {
 
 #[derive(clap::Subcommand, Clone, Debug)]
 pub enum Command {
-    MassDelete {
+    #[clap(about = "Deletes all images that are hosted on Imgur")]
+    PurgeOnline {
         #[clap(short, long)]
         path: Option<PathBuf>,
     },

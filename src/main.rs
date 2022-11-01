@@ -1,4 +1,4 @@
-mod mass_delete;
+mod purge_online;
 mod util;
 
 use clap::Parser;
@@ -11,8 +11,8 @@ async fn main() {
     let command = args.command;
 
     match command {
-        Some(util::Command::MassDelete { path }) => {
-            mass_delete::handler(path).await.unwrap();
+        Some(util::Command::PurgeOnline { path }) => {
+            purge_online::handler(path).await.unwrap();
         }
         None => {
             show_menu().await.unwrap();
@@ -24,9 +24,9 @@ async fn show_menu() -> Result<()> {
     loop {
         println!();
         let menu_response: usize = Select::with_theme(&ColorfulTheme::default())
-            .with_prompt("Pick a option (use arrow keys to select, enter to confirm)")
+            .with_prompt("Pick an option (use arrow keys to select, enter to confirm)")
             .items(&[
-                "1. Mass delete online history items",
+                "1. Purge online history items",
                 "2. Open ShareX Website",
                 "3. View source code (GitHub)",
                 "Exit",
@@ -43,7 +43,7 @@ async fn show_menu() -> Result<()> {
 async fn handle_option(number: usize) -> Result<()> {
     match number {
         0 => {
-            mass_delete::handler(None).await?;
+            purge_online::handler(None).await?;
         }
         1 => {
             util::open_webpage(util::SHAREX_URL.to_string().as_str());
