@@ -201,12 +201,17 @@ fn filter_deletion_urls(items: &[HistoryItem], from_date: Option<DateTime<Local>
 async fn delete_urls(deletion_urls: Result<Vec<String>>) -> Result<()> {
     let deletion_urls = deletion_urls?;
     if deletion_urls.len() == 0 {
-        println!("No items to delete");
+        println!("{}", Colour::Yellow.bold().paint("No items to delete!"));
         return Ok(());
     }
 
     if deletion_urls.len() > 1250 {
-        println!("Amount of items to delete is too high for Imgur API, exiting...");
+        println!(
+            "{}",
+            Colour::Yellow
+                .bold()
+                .paint("Amount of items to delete is too high for Imgur API, canceling...")
+        );
         return Ok(());
     }
 

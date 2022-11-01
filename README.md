@@ -42,7 +42,7 @@ I tried to store the static strings in the `Cargo.toml`, but I figured it's not 
 I used https://transform.tools/json-to-rust-serde as a reference for the JSON structure.
 
 #### Crates used
-- `eyre`: For simple error handling
+- `eyre`: For simple error reporting
 - `tokyo` & `futures`: For writing async Rust
 - `serde` & `serde_json`: For JSON parsing
 - `clap`: For CLI parsing
