@@ -1,17 +1,14 @@
 use crate::util;
+use crate::util::is_interactive;
 
 use ansi_term::{self, Colour};
 use chrono::prelude::*;
 use chrono::Duration;
-use clap::Parser;
-use dialoguer::{theme::ColorfulTheme, Input, Select};
+use dialoguer::{theme::ColorfulTheme, FuzzySelect, Input};
 use directories::{BaseDirs, UserDirs};
 use eyre::Result;
 use serde::{Deserialize, Serialize};
-use std::{
-    io::Read,
-    path::{Path, PathBuf},
-};
+use std::{io::Read, path::PathBuf};
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -49,28 +46,31 @@ pub async fn handler(pathflag: Option<PathBuf>) -> Result<()> {
     // If a pathflag is Some() it means it's passed via a flag, use that path and skip the prompting
     // Otherwise, prompt the user to select a default path (depending on type of installation), or tinyfiledialog for a path, or manual input
 
-    // Maybe call prompt_history_file in the Some and None. Call get_path_input in prompt_history_file
+    // Either gets the pathflag or prompts the user for a path
     let path = match pathflag {
         Some(pathflag) => pathflag,
-        None => get_path_input(),
+        None => prompt_history_file().ok_or(eyre::eyre!(
+            "No path provided, please provide a path to your ShareX history file"
+        ))?,
     };
 
-    let file = prompt_history_file(&path);
-
-    if file == None {
+    if !PathBuf::from(&path).exists() {
+        eprintln!("A valid path was not specified. Please try again.");
         return Ok(());
     }
 
-    let history_urls = get_history_urls(file.unwrap());
+    let history_urls = get_history_urls(path);
 
     delete_urls(history_urls).await?;
 
     Ok(())
 }
 
-fn prompt_history_file(path: &Path) -> Option<PathBuf> {
+fn prompt_history_file() -> Option<PathBuf> {
+    let default_path = get_default_history_path();
+
     println!();
-    let menu_response: usize = Select::with_theme(&ColorfulTheme::default())
+    let menu_response: usize = FuzzySelect::with_theme(&ColorfulTheme::default())
         .with_prompt("Pick an option (use arrow keys to select, enter to confirm)")
         .items(&[
             "Use default path",
@@ -84,11 +84,11 @@ fn prompt_history_file(path: &Path) -> Option<PathBuf> {
     println!();
 
     match menu_response {
-        0 => Some(path.to_path_buf()),
+        0 => Some(default_path.to_path_buf()),
         1 => Some(
             tinyfiledialogs::open_file_dialog(
                 "Choose where sharex history is stored",
-                path.to_str().unwrap(),
+                default_path.to_str().unwrap(),
                 Some((&["History.json", "*.json"], "History.json")),
             )
             .map_or_else(
@@ -130,28 +130,20 @@ fn prompt_history_file(path: &Path) -> Option<PathBuf> {
 }
 
 fn get_history_urls(path: PathBuf) -> Result<Vec<String>> {
-    let spinner = util::setup_spinner("Reading and parsing JSON...");
+    if is_interactive() {
+        let spinner = util::setup_spinner("Reading and parsing JSON...");
 
-    let history_json = read_history_json(path)?;
-    let history_items = parse_history_json(&history_json)?;
-    let deletion_urls = filter_deletion_urls(&history_items, None);
+        let history_json = read_history_json(path)?;
+        let history_items = parse_history_json(&history_json)?;
+        let deletion_urls = filter_deletion_urls(&history_items, None);
 
-    spinner.finish_with_message(format!("Done! {} items found", deletion_urls.len()));
-    Ok(deletion_urls)
-}
-
-fn get_path_input() -> PathBuf {
-    let args = util::Args::parse();
-    let path = match args.command {
-        Some(util::Command::PurgeOnline { path }) => path,
-        None => None,
-    };
-
-    let default_history_path = get_default_history_path();
-
-    match path {
-        Some(path) => path,
-        None => default_history_path,
+        spinner.finish_with_message(format!("Done! {} items found", deletion_urls.len()));
+        return Ok(deletion_urls);
+    } else {
+        let history_json = read_history_json(path)?;
+        let history_items = parse_history_json(&history_json)?;
+        let deletion_urls = filter_deletion_urls(&history_items, None);
+        return Ok(deletion_urls);
     }
 }
 
@@ -233,6 +225,24 @@ async fn delete_urls(deletion_urls: Result<Vec<String>>) -> Result<()> {
 
     let results = futures::future::join_all(futures).await;
 
+    //     // I don't understand Rust enough so the stuff below looks kinda cursed
+    //     let headers = resp.headers().clone();
+    //     let remaining = headers
+    //         .get("x-post-rate-limit-remaining")
+    //         .unwrap()
+    //         .to_str()?
+    //         .to_owned();
+    //     let limit = headers
+    //         .get("x-post-rate-limit-limit")
+    //         .unwrap()
+    //         .to_str()?
+    //         .to_owned();
+    //     let reset = headers
+    //         .get("x-post-rate-limit-Reset")
+    //         .unwrap()
+    //         .to_str()?
+    //         .to_owned();
+
     for result in results {
         progress_bar.inc(1);
         // Check the headers here for rate limits?
@@ -253,57 +263,3 @@ async fn delete_urls(deletion_urls: Result<Vec<String>>) -> Result<()> {
 
     Ok(())
 }
-
-// async fn send_deletion(url: &str) -> Result<(String, String, String)> {
-//     // TODO: Only have 1 client (for multiple requests) and use a proxy to prevent rate limiting
-//     // TODO: Send different type of body by matching on the host
-//     let client = reqwest::Client::new();
-//     let params = [("confirm", true)];
-//     let resp = client.post(url).form(&params).send().await?;
-
-//     println!("{:#?}", resp);
-
-//     match resp.status() {
-//         reqwest::StatusCode::OK => {
-//             println!("OK");
-//         }
-//         reqwest::StatusCode::TOO_MANY_REQUESTS => {
-//             println!("TOO MANY REQUESTS");
-//         }
-//         reqwest::StatusCode::BAD_GATEWAY => {
-//             println!("BAD GATEWAY");
-//         }
-//         _ => {
-//             println!("Not OK");
-//         }
-//     }
-
-//     // I don't understand Rust enough so the stuff below looks kinda cursed
-//     let headers = resp.headers().clone();
-//     let remaining = headers
-//         .get("x-post-rate-limit-remaining")
-//         .unwrap()
-//         .to_str()?
-//         .to_owned();
-//     let limit = headers
-//         .get("x-post-rate-limit-limit")
-//         .unwrap()
-//         .to_str()?
-//         .to_owned();
-//     let reset = headers
-//         .get("x-post-rate-limit-Reset")
-//         .unwrap()
-//         .to_str()?
-//         .to_owned();
-
-//     println!(
-//         "Remaining: {} Limit: {} Reset: {}",
-//         Colour::Green.paint(&remaining),
-//         Colour::Yellow.paint(&limit),
-//         Colour::Red.paint(&reset)
-//     );
-
-//     print!("{:?}", headers);
-
-//     Ok((remaining, limit, reset))
-// }
