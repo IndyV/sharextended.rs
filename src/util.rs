@@ -19,7 +19,7 @@ pub struct Args {
 
 #[derive(clap::Subcommand, Clone, Debug)]
 pub enum Command {
-    #[clap(about = "Deletes all images that are hosted on Imgur")]
+    #[clap(about = "Delete all screenshots that have been uploaded to Imgur")]
     PurgeOnline {
         #[clap(short, long)]
         path: Option<PathBuf>,

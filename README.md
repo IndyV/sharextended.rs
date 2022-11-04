@@ -8,7 +8,7 @@ A Rusty program that provides ShareX utility commands.
 Usage: sharextended.exe [COMMAND]
 
 Commands:
-  purge-online  Deletes all images that are  on Imgur
+  purge-online  Delete all screenshots that have been uploaded to Imgur
   help          Print this message or the help of the given subcommand(s)
 
 Options:
