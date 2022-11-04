@@ -23,5 +23,11 @@ jobs:
     - name: Build
       run: cargo build --verbose
 
+    - name: Look around
+      run: |
+        ls -la
+        ls -la target
+        ls -la target/debug
+
     - name: Lint
       run: cargo clippy -- -W clippy::pedantic -W clippy::nursery -W clippy::expect_used
