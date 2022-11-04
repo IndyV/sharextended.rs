@@ -84,7 +84,7 @@ fn prompt_history_file() -> Option<PathBuf> {
     println!();
 
     match menu_response {
-        0 => Some(default_path.to_path_buf()),
+        0 => Some(default_path.clone()),
         1 => Some(
             tinyfiledialogs::open_file_dialog(
                 "Choose where sharex history is stored",
