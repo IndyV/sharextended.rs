@@ -71,7 +71,7 @@ fn prompt_history_file() -> Option<PathBuf> {
 
     println!();
     let menu_response: usize = FuzzySelect::with_theme(&ColorfulTheme::default())
-        .with_prompt("Pick an option (use arrow keys to select, enter to confirm)")
+        .with_prompt("Pick an option")
         .items(&[
             "Use default path",
             "Use file picker",
@@ -138,12 +138,14 @@ fn get_history_urls(path: PathBuf) -> Result<Vec<String>> {
         let deletion_urls = filter_deletion_urls(&history_items, None);
 
         spinner.finish_with_message(format!("Done! {} items found", deletion_urls.len()));
-        return Ok(deletion_urls);
+
+        Ok(deletion_urls)
     } else {
         let history_json = read_history_json(path)?;
         let history_items = parse_history_json(&history_json)?;
         let deletion_urls = filter_deletion_urls(&history_items, None);
-        return Ok(deletion_urls);
+
+        Ok(deletion_urls)
     }
 }
 

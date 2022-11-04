@@ -55,11 +55,11 @@ pub fn is_interactive() -> bool {
     match args.command {
         None => {
             // No command provided, running in interactive mode
-            return true;
+            true
         }
         _ => {
             // Command provided, running in non-interactive mode
-            return false;
+            false
         }
     }
 }
