@@ -8,25 +8,35 @@ A Rusty program that provides ShareX utility commands.
 Usage: sharextended.exe [COMMAND]
 
 Commands:
-  purge-online  Deletes all images that are hosted on Imgur
+  purge-online  Deletes all images that are  on Imgur
   help          Print this message or the help of the given subcommand(s)
 
 Options:
   -h, --help     Print help information
   -V, --version  Print version information
 ```
-> If `[COMMAND]` is not specified, the program will run in interactive mode.
+> If `[COMMAND]` is not specified the program will run in interactive mode.
+
 
 ## Motivation
 
+I started this project a while ago after an online friend asked me how he could delete all his images hosted on Imgur. While a simple script was enough to help him I wanted to make the project as accessible as possible. So I was trying to make it an executable. I made that project with TS/Node.js and was planning to package it. I tried to use projects like [PKG](https://github.com/vercel/pkg) or even tried [NCC](https://github.com/vercel/ncc), but I had issues trying to package it. It wasn't able to package the [Open](https://www.npmjs.com/package/open) dependency.
+
+
 ### Why Rust?
-While this project could have also been done in many other ways like:
-- C#, powerful and also matching the language of the ShareX project
+
+Recently I just wanted to try out [the most loved language](https://survey.stackoverflow.co/2022/#technology-most-loved-dreaded-and-wanted) for myself and was looking for a project to get started with. This project seemed like the perfect fit since it also allows for easy distribution with cross-platform compilation.
+So I decided to try Rust, and it worked like a charm.
+
+Yes, I know this project could have also been done in many other (easier) ways, like:
+- C#, powerful and also matching the language of the ShareX project.
 - Or even simpler as a Powershell or Python script probably
-I just wanted to try out the most loved language for myself. It also allows for easy distribution with easy cross-platform compilation.
+
+But this project wasn't for any business related task and I wanted to try out Rust. So I did.
 
 It's a bit hard to get started with due to these new concepts, like ownership, borrowing, and lifetimes, but I really like it.
 It's a very powerful language with great error messages and many useful crates. I'm looking forward to learn more about it.
+
 
 ### Code
 Watching video's from [No Boilerplate](https://www.youtube.com/c/NoBoilerplate) motivated me to try out Rust. On advise about your Rust toolkit, he suggested the following Clippy lints:
