@@ -25,9 +25,9 @@ jobs:
 
     - name: Look around
       run: |
-        ls -la
-        ls -la target
-        ls -la target/debug
+        ls
+        ls target
+        ls target/debug
 
     - name: Lint
       run: cargo clippy -- -W clippy::pedantic -W clippy::nursery -W clippy::expect_used
