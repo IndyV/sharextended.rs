@@ -100,37 +100,19 @@ fn prompt_history_file() -> Option<PathBuf> {
                 PathBuf::from,
             ),
         ),
-        2 => {
-            loop {
-                let input = Input::<String>::with_theme(&ColorfulTheme::default())
-                    .with_prompt("Enter path to history file")
-                    .default(default_path.to_str()?.to_string())
-                    .interact()
-                    .unwrap();
-                let path = PathBuf::from(input);
-                if path.exists() {
-                    return Some(path);
-                } else {
-                    println!("Invalid path given. Please try again.");
-                }
+        2 => loop {
+            let input = Input::<String>::with_theme(&ColorfulTheme::default())
+                .with_prompt("Enter path to history file")
+                .default(default_path.to_str()?.to_string())
+                .interact()
+                .unwrap();
+            let path = PathBuf::from(input);
+            if path.exists() {
+                return Some(path);
+            } else {
+                println!("Invalid path given. Please try again.");
             }
-            // match Input::<String>::with_theme(&ColorfulTheme::default())
-            //     .with_prompt("Enter the exact path to your history file")
-            //     .interact_on(&console::Term::stdout())
-            // {
-            //     Ok(path) => {
-            //         if !PathBuf::from(&path).exists() {
-            //             eprintln!("A valid path was not specified. Exiting.");
-            //             std::process::exit(1);
-            //         }
-            //         Some(PathBuf::from(path))
-            //     }
-            //     Err(e) => {
-            //         eprintln!("An error occurred: {}", e);
-            //         std::process::exit(1);
-            //     }
-            // }
-        }
+        },
         3 => {
             println!("Canceling operation...");
             None
