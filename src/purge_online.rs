@@ -43,14 +43,10 @@ struct Tags {
 }
 
 pub async fn handler(pathflag: Option<PathBuf>) -> Result<()> {
-    // If a pathflag is Some() it means it's passed via a flag, use that path and skip the prompting
-    // Otherwise, prompt the user to select a default path (depending on type of installation), or tinyfiledialog for a path, or manual input
-
-    // Either gets the pathflag or prompts the user for a path
     let path = match pathflag {
         Some(pathflag) => pathflag,
         None => prompt_history_file().ok_or(eyre::eyre!(
-            "No path provided, please provide a path to your ShareX history file"
+            "No path provided. Please provide a path to your ShareX history file."
         ))?,
     };
 
@@ -210,7 +206,6 @@ async fn delete_urls(deletion_urls: Result<Vec<String>>) -> Result<()> {
     }
 
     let progress_bar = util::setup_progressbar(deletion_urls.len());
-    // progress_bar.enable_steady_tick(Duration::from_millis(500)); // This only visually updates the ticker once every 500ms instead of when the tick occurs
 
     let client = reqwest::Client::new();
 
