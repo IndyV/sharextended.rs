@@ -7,7 +7,7 @@ use std::{borrow::Cow, time::Duration};
 
 lazy_static! {
     pub static ref SHAREX_URL: &'static str = "https://getsharex.com/";
-    pub static ref REPO_URL: &'static str = "https://github.com/IndyV/sharextend_cli";
+    pub static ref REPO_URL: &'static str = "https://github.com/IndyV/sharextended";
 }
 
 #[derive(Parser, Debug)]

@@ -26,9 +26,9 @@ async fn show_menu() -> Result<()> {
         let menu_response: usize = Select::with_theme(&ColorfulTheme::default())
             .with_prompt("Pick an option (use arrow keys to select, enter to confirm)")
             .items(&[
-                "1. Purge online history items",
-                "2. Open ShareX Website",
-                "3. View source code (GitHub)",
+                "Purge online history items",
+                "Open ShareX Website",
+                "View source code (GitHub)",
                 "Exit",
             ])
             .default(0)

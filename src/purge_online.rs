@@ -44,18 +44,23 @@ struct Tags {
 
 pub async fn handler(pathflag: Option<PathBuf>) -> Result<()> {
     let path = match pathflag {
-        Some(pathflag) => pathflag,
-        None => prompt_history_file().ok_or(eyre::eyre!(
-            "No path provided. Please provide a path to your ShareX history file."
-        ))?,
+        Some(pathflag) => Some(pathflag),
+        None => prompt_history_file(),
     };
 
-    if !PathBuf::from(&path).exists() {
+    let history_file = match path {
+        Some(path) => path,
+        None => {
+            return Ok(());
+        }
+    };
+
+    if !PathBuf::from(&history_file).exists() {
         eprintln!("A valid path was not specified. Please try again.");
         return Ok(());
     }
 
-    let history_urls = get_history_urls(path);
+    let history_urls = get_history_urls(history_file);
 
     delete_urls(history_urls).await?;
 
@@ -96,23 +101,35 @@ fn prompt_history_file() -> Option<PathBuf> {
             ),
         ),
         2 => {
-            // TODO: While till valid path given or exit?
-            match Input::<String>::with_theme(&ColorfulTheme::default())
-                .with_prompt("Enter the exact path to your history file")
-                .interact_on(&console::Term::stdout())
-            {
-                Ok(path) => {
-                    if !PathBuf::from(&path).exists() {
-                        eprintln!("A valid path was not specified. Exiting.");
-                        std::process::exit(1);
-                    }
-                    Some(PathBuf::from(path))
-                }
-                Err(e) => {
-                    eprintln!("An error occurred: {}", e);
-                    std::process::exit(1);
+            loop {
+                let input = Input::<String>::with_theme(&ColorfulTheme::default())
+                    .with_prompt("Enter path to history file")
+                    .default(default_path.to_str()?.to_string())
+                    .interact()
+                    .unwrap();
+                let path = PathBuf::from(input);
+                if path.exists() {
+                    return Some(path);
+                } else {
+                    println!("Invalid path given. Please try again.");
                 }
             }
+            // match Input::<String>::with_theme(&ColorfulTheme::default())
+            //     .with_prompt("Enter the exact path to your history file")
+            //     .interact_on(&console::Term::stdout())
+            // {
+            //     Ok(path) => {
+            //         if !PathBuf::from(&path).exists() {
+            //             eprintln!("A valid path was not specified. Exiting.");
+            //             std::process::exit(1);
+            //         }
+            //         Some(PathBuf::from(path))
+            //     }
+            //     Err(e) => {
+            //         eprintln!("An error occurred: {}", e);
+            //         std::process::exit(1);
+            //     }
+            // }
         }
         3 => {
             println!("Canceling operation...");
