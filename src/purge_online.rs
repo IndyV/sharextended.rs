@@ -125,23 +125,11 @@ fn prompt_history_file() -> Option<PathBuf> {
 }
 
 fn get_history_urls(path: PathBuf) -> Result<Vec<String>> {
-    if is_interactive() {
-        let spinner = util::setup_spinner("Reading and parsing JSON...");
+    let history_json = read_history_json(path)?;
+    let history_items = parse_history_json(&history_json)?;
+    let deletion_urls = filter_deletion_urls(&history_items, None);
 
-        let history_json = read_history_json(path)?;
-        let history_items = parse_history_json(&history_json)?;
-        let deletion_urls = filter_deletion_urls(&history_items, None);
-
-        spinner.finish_with_message(format!("Done! {} items found", deletion_urls.len()));
-
-        Ok(deletion_urls)
-    } else {
-        let history_json = read_history_json(path)?;
-        let history_items = parse_history_json(&history_json)?;
-        let deletion_urls = filter_deletion_urls(&history_items, None);
-
-        Ok(deletion_urls)
-    }
+    Ok(deletion_urls)
 }
 
 fn get_default_history_path() -> PathBuf {
