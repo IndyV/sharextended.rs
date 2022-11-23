@@ -1,5 +1,4 @@
 use crate::util;
-use crate::util::is_interactive;
 
 use ansi_term::{self, Colour};
 use chrono::prelude::*;
@@ -125,9 +124,13 @@ fn prompt_history_file() -> Option<PathBuf> {
 }
 
 fn get_history_urls(path: PathBuf) -> Result<Vec<String>> {
+    let spinner = util::setup_spinner("Reading and parsing JSON...");
+
     let history_json = read_history_json(path)?;
     let history_items = parse_history_json(&history_json)?;
     let deletion_urls = filter_deletion_urls(&history_items, None);
+
+    spinner.finish_with_message(format!("Done! {} items found", deletion_urls.len()));
 
     Ok(deletion_urls)
 }
@@ -137,9 +140,8 @@ fn get_default_history_path() -> PathBuf {
         || BaseDirs::new().unwrap().home_dir().join("Documents"),
         |user_dirs| user_dirs.document_dir().unwrap().to_path_buf(),
     );
-    let default_history_path: PathBuf = document_directory.join("ShareX").join("History.json");
 
-    default_history_path
+    document_directory.join("ShareX").join("History.json")
 }
 
 fn read_history_json(path: PathBuf) -> Result<String> {

@@ -48,11 +48,3 @@ pub fn setup_progressbar(items: usize) -> ProgressBar {
 pub fn open_webpage(url: &str) {
     open::that(url).unwrap_or_else(|_| panic!("Unable to open webpage {}", &url));
 }
-
-pub fn is_interactive() -> bool {
-    let args = Args::parse();
-    match args.command {
-        None => true,
-        _ => false,
-    }
-}
