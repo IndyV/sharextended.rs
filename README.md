@@ -20,8 +20,7 @@ Options:
 
 ## Motivation
 
-I started this project a while ago after an online friend asked me how he could delete all his images hosted on Imgur. While a simple script was enough to help him I wanted to make the project as accessible as possible. So I was trying to make it an executable. I made that project with TS/Node.js and was planning to package it. I tried to use projects like [PKG](https://github.com/vercel/pkg) or even tried [NCC](https://github.com/vercel/ncc), but I had issues trying to package it. It wasn't able to package the [Open](https://www.npmjs.com/package/open) dependency.
-
+I started this project a while ago after an online friend asked me how he could delete all his images hosted on Imgur. While a simple script was enough to help him, I wanted to make the project as accessible as possible by making it a standalone executable. I made that project with TS/Node.js and was planning to package it. I tried to use projects like [PKG](https://github.com/vercel/pkg), but I kept having issues trying to package it. It wasn't able to package the [Open](https://www.npmjs.com/package/open) dependency and would have to be downloaded alongside the package.
 
 ### Why Rust?
 
