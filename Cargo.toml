@@ -1,12 +1,12 @@
 [package]
 name = "sharextended"
-version = "0.2.0"
+version = "1.0.0"
 edition = "2021"
 build = "build.rs"
 
 [package.metadata.winres]
 OriginalFilename = "sharextended.exe"
-LegalCopyright = "Copyright © 2022"
+LegalCopyright = "Copyright © 2023"
 
 [target.'cfg(windows)'.build-dependencies]
 winres = "0.1"
