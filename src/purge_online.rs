@@ -10,19 +10,14 @@ use serde::{Deserialize, Serialize};
 use std::{io::Read, path::PathBuf};
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 struct HistoryItem {
-    #[serde(rename = "FileName")]
     pub file_name: String,
-    #[serde(rename = "FilePath")]
     pub file_path: Option<String>,
-    #[serde(rename = "DateTime")]
     pub date_time: DateTime<Local>,
     #[serde(rename = "Type")]
     pub type_field: String,
-    #[serde(rename = "Host")]
     pub host: String,
-    #[serde(rename = "Tags")]
     pub tags: Option<Tags>,
     #[serde(rename = "URL")]
     pub url: Option<String>,
@@ -33,11 +28,9 @@ struct HistoryItem {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 struct Tags {
-    #[serde(rename = "WindowTitle")]
     pub window_title: Option<String>,
-    #[serde(rename = "ProcessName")]
     pub process_name: String,
 }
 

@@ -1,4 +1,10 @@
-# ShareXtended
+<h1 align="center">ShareXtended</h1>
+
+<p align="center">
+  <a href="https://github.com/IndyV/sharextended/actions/workflows/build.yml">
+    <img src="https://github.com/IndyV/sharextended/actions/workflows/build.yml/badge.svg" alt="Build status">
+  </a>
+</p>
 
 A Rusty program that provides ShareX utility commands.
 
@@ -15,8 +21,8 @@ Options:
   -h, --help     Print help information
   -V, --version  Print version information
 ```
-> If `[COMMAND]` is not specified the program will run in interactive mode.
 
+> If `[COMMAND]` is not specified the program will run in interactive mode.
 
 ## Motivation
 
@@ -28,6 +34,7 @@ Recently I just wanted to try out [the most loved language](https://survey.stack
 So I decided to try Rust, and it worked like a charm.
 
 Yes, I know this project could have also been done in many other (easier) ways, like:
+
 - C#, powerful and also matching the language of the ShareX project.
 - Or even simpler as a Powershell or Python script probably
 
@@ -36,8 +43,8 @@ But this project wasn't for any business related task and I wanted to try out Ru
 It's a bit hard to get started with due to these new concepts, like ownership, borrowing, and lifetimes, but I really like it.
 It's a very powerful language with great error messages and many useful crates. I'm looking forward to learn more about it.
 
-
 ### Code
+
 Watching video's from [No Boilerplate](https://www.youtube.com/c/NoBoilerplate) motivated me to try out Rust. On advise about your Rust toolkit, he suggested the following Clippy lints:
 
 ```ps1
@@ -51,6 +58,7 @@ I tried to store the static strings in the `Cargo.toml`, but I figured it's not 
 I used https://transform.tools/json-to-rust-serde as a reference for the JSON structure.
 
 #### Crates used
+
 - `eyre`: For simple error reporting
 - `tokyo` & `futures`: For writing async Rust
 - `serde` & `serde_json`: For (JSON) Serialization/Deserialization
