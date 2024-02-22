@@ -1,8 +1,8 @@
 <h1 align="center">ShareXtended</h1>
 
 <p align="center">
-  <a href="https://github.com/IndyV/sharextended/actions/workflows/build.yml">
-    <img src="https://github.com/IndyV/sharextended/actions/workflows/build.yml/badge.svg" alt="Build status">
+  <a href="https://github.com/IndyV/sharextended.rs/actions/workflows/build.yml">
+    <img src="https://github.com/IndyV/sharextended.rs/actions/workflows/build.yml/badge.svg" alt="Build status">
   </a>
 </p>
 
